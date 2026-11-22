@@ -1,0 +1,24 @@
+name: Build catgirl
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Theos
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make git curl
+          git clone --recursive https://github.com/theos/theos.git $HOME/theos
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+
+      - name: Build
+        run: make package
+
+      - name: Upload Dylib
+        uses: actions/upload-artifact@v3
+        with:
+          name: catgirl-Dylib
+          path: .theos/obj/debug/catgirl.dylib
