@@ -12,23 +12,31 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y make git curl unzip xz-utils wget
           
-          # Theos
+          # 1. Theos
           git clone --recursive https://github.com/theos/theos.git $HOME/theos
           echo "THEOS=$HOME/theos" >> $GITHUB_ENV
           
-          # SDK
+          # 2. SDK
           wget -q https://github.com/theos/sdks/archive/refs/heads/master.zip -O sdks.zip
           unzip -q sdks.zip
           mkdir -p $HOME/theos/sdks
           mv sdks-master/* $HOME/theos/sdks/ || true
           rm -rf sdks.zip sdks-master
           
-          # Toolchain
+          # 3. Тулчейн (качаем архив)
           mkdir -p $HOME/theos/toolchain/linux
           cd $HOME/theos/toolchain/linux
           wget -q https://github.com/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma
+          
+          # 4. Распаковка
           tar -xf linux-ios-arm64e-clang-toolchain.tar.lzma
-          mv linux-ios-arm64e-clang-toolchain iphone
+          
+          # 5. Ищем, как называется папка, и переименовываем её в iphone
+          FOLDER=$(find . -maxdepth 1 -type d -name "*clang*" | head -n 1)
+          mv "$FOLDER" iphone
+          
+          # 6. Чистим архив
+          rm linux-ios-arm64e-clang-toolchain.tar.lzma
 
       - name: Build
         run: make package
