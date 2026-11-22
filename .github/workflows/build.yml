@@ -23,13 +23,22 @@ jobs:
           mv sdks-master/* $HOME/theos/sdks/ || true
           rm -rf sdks.zip sdks-master
           
-          # 3. Качаем и ставим тулчейн
+          # 3. Качаем тулчейн
           mkdir -p $HOME/theos/toolchain/linux
           cd $HOME/theos/toolchain/linux
           wget -q https://github.com/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma
+          
+          # Смотрим, что скачалось
+          ls -la
+          
+          # Распаковываем
           tar -xf linux-ios-arm64e-clang-toolchain.tar.lzma
-          mv linux-ios-arm64e-clang-toolchain iphone
-          rm linux-ios-arm64e-clang-toolchain.tar.lzma
+          
+          # Смотрим, как называется папка после распаковки
+          ls -la
+          
+          # Переименовываем (пробуем оба варианта)
+          mv linux-ios-arm64e-clang-toolchain iphone || mv linux-ios-arm64e-clang iphone || true
 
       - name: Build
         run: |
