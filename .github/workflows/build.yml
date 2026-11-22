@@ -12,38 +12,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y make git curl unzip xz-utils wget
           
-          # 1. Качаем Theos
+          # Theos
           git clone --recursive https://github.com/theos/theos.git $HOME/theos
           echo "THEOS=$HOME/theos" >> $GITHUB_ENV
           
-          # 2. Качаем SDK
+          # SDK
           wget -q https://github.com/theos/sdks/archive/refs/heads/master.zip -O sdks.zip
           unzip -q sdks.zip
           mkdir -p $HOME/theos/sdks
           mv sdks-master/* $HOME/theos/sdks/ || true
           rm -rf sdks.zip sdks-master
           
-          # 3. Качаем тулчейн
+          # Toolchain
           mkdir -p $HOME/theos/toolchain/linux
           cd $HOME/theos/toolchain/linux
           wget -q https://github.com/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma
-          
-          # Смотрим, что скачалось
-          ls -la
-          
-          # Распаковываем
           tar -xf linux-ios-arm64e-clang-toolchain.tar.lzma
-          
-          # Смотрим, как называется папка после распаковки
-          ls -la
-          
-          # Переименовываем (пробуем оба варианта)
-          mv linux-ios-arm64e-clang-toolchain iphone || mv linux-ios-arm64e-clang iphone || true
+          mv linux-ios-arm64e-clang-toolchain iphone
 
       - name: Build
-        run: |
-          ls -la
-          make package
+        run: make package
 
       - name: Upload Dylib
         uses: actions/upload-artifact@v4
