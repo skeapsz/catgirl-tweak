@@ -1,0 +1,9 @@
+Package: com.kai.catgirl
+Name: catgirl
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Custom TikTok mod for Kai
+Maintainer: Kai
+Author: Kai
+Section: Tweaks
+Depends: mobilesubstrate
